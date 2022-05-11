@@ -26,10 +26,57 @@ const musicians: Musician[] = [
   }
 ]
 
+/**
+ * Responsible for formatting dates without using 
+ * DateTimeFormat
+ * @param birthday Birthday
+ */
+function parseDate(birthday: string | Date) {
+  const months: string[] = [
+    "Ene",
+    "Feb",
+    "Mar",
+    "Abr",
+    "May",
+    "Jun",
+    "Jul",
+    "Ago",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dic"
+  ];
+
+  const days: string[] = [
+    "Dom",
+    "Lun",
+    "Mar",
+    "Mie",
+    "Jue",
+    "Vie",
+    "Sab"
+  ];
+
+  const date = new Date(birthday);
+
+  const month = date.getMonth();
+  const year = date.getFullYear();
+  const currDate = date.getDate();
+  const day = date.getDay();
+
+  return `${days.at(day)}, ${currDate} de ${months.at(month)} de ${year}`;
+}
+
 function createMusician(musician: Musician): HTMLDivElement {
   const musicianHTML = document.createElement("div");
 
   musicianHTML.className = "col-12 col-sm-8 col-md-6 col-xl-4 p-3";
+
+  const birthday = new Intl
+    .DateTimeFormat("es", { dateStyle: "long" })
+    .format(new Date(musician.birthday));
+
+  // const birthday = parseDate(musician.birthday);
 
   musicianHTML.innerHTML = /*html*/ `
     <div class="card border-0 bg-white shadow p-2" style="border-radius: 20px;">
@@ -48,7 +95,7 @@ function createMusician(musician: Musician): HTMLDivElement {
           <div class="px-3">
             <h4>${musician.fullname}</h4>
             <p class="text-muted">${musician.description}</p>
-            <small>${musician.birthday}</small>
+            <small>${birthday}</small>
           </div>
         </div>
       </div>
